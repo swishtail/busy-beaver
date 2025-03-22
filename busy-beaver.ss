@@ -1,5 +1,4 @@
 ;;; Busy Beaver
-
 (define (tape-read  t)   (cadr t))
 (define (tape-write t s) (list (car t) s (caddr t)))
 (define (tape-left  t)   (list (cdar t) (caar t) (cons (cadr t) (caddr t))))

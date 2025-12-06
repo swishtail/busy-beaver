@@ -4,20 +4,20 @@
 (define make-tape
   (lambda (n)
     (letrec ((zeros
-	      (lambda (n)
-		(if (zero? n)
-		    '()
-		    (cons 0 (zeros (- n 1)))))))
+              (lambda (n)
+                (if (zero? n)
+                    '()
+                    (cons 0 (zeros (- n 1)))))))
       (let ((halfway (floor (/ n 2))))
-	(if (odd? n)
-	    (list (zeros halfway) 0 (zeros halfway))
-	    (list (zeros halfway) 0 (zeros (- halfway 1))))))))
+        (if (odd? n)
+            (list (zeros halfway) 0 (zeros halfway))
+            (list (zeros halfway) 0 (zeros (- halfway 1))))))))
 
 (define display-tape
   (lambda (t)
     (display
      (append (reverse (car t))
-	     (cons (list (cadr t)) (caddr t))))
+             (cons (list (cadr t)) (caddr t))))
     (newline)))
 
 (define tape-read
@@ -59,34 +59,34 @@
 (define branch-move
   (lambda (b)
     (if (zero? (cadr b))
-	tape-left
-	tape-right)))
+        tape-left
+        tape-right)))
 
 (define head-exec
   (lambda (t c)
     (letrec ((output
-	      (lambda (b)
-		(list ((branch-move b)
-		       (tape-write t (branch-symbol b)))
-		      (branch-next-card b)))))
+              (lambda (b)
+                (list ((branch-move b)
+                       (tape-write t (branch-symbol b)))
+                      (branch-next-card b)))))
       (if (zero? (tape-read t))
-	  (output (zero-branch c))
-	  (output (one-branch c))))))
+          (output (zero-branch c))
+          (output (one-branch c))))))
 
 (define run-machine
   (lambda (head tape cards)
     (begin
       (display-tape tape)
       (let machine-loop ((next-tape tape) (next-card (cadr cards)))
-	(if (zero? (card-number next-card))
-	    (begin
-	      (display "halt")
-	      (newline))
-	    (let ((run-head (head next-tape next-card)))
-	      (begin
-		(display-tape (car run-head))
-		(machine-loop (car run-head)
-			      (list-ref cards (cadr run-head))))))))))
+        (if (zero? (card-number next-card))
+            (begin
+              (display "halt")
+              (newline))
+            (let ((run-head (head next-tape next-card)))
+              (begin
+                (display-tape (car run-head))
+                (machine-loop (car run-head)
+                              (list-ref cards (cadr run-head))))))))))
 
 
 ;; Examples
